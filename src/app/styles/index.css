@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: calc(10px + 2vmin);
+    /* font-size: 1rem; */
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+button {
+    background-color: #61DAFB;
+    color: #282c34;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    text-align: center;
+    outline: none;
+}
+
+button:hover {
+    transition: background-color 0.3s ease;
+    box-shadow: none;
+    /* transform: scale(1.05); */
+}
+
+button:active {
+    background-color: #282c34;
+    color: #61DAFB;
+    box-shadow: none;
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}

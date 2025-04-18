@@ -1,0 +1,3 @@
+deployed contract in Avalanche:
+0x74BE2e0b78C5257B54E0AA5D7D1323DFbc08E9CE
+
