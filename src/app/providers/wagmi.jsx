@@ -6,6 +6,8 @@ import {
     sepolia,
     avalancheFuji,
     moonbeam,
+    moonbaseAlpha,
+    moonbeamDev,
 } from 'wagmi/chains';
 
 const moonbeamLocal = {
@@ -50,6 +52,9 @@ export const config = getDefaultConfig({
         moonbeam,
         moonbeamLocal,
         avalancheLocal,
+        moonbaseAlpha,
+        moonbeamDev,
+        moonbeam,
         ...(process.env.REACT_APP_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
     ],
 });

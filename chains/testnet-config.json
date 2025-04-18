@@ -14,7 +14,10 @@
       "aUSDC": "aUSDC"
     },
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
-    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F"
+    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
+    "contract": {
+      "address": "0x33872879Ce058fc3DD7a28481141E592a083c4C9"
+    }
   },
   {
     "name": "avalanche",
@@ -31,6 +34,9 @@
       "aUSDC": "aUSDC"
     },
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
-    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F"
+    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
+    "contract": {
+      "address": "0x74BE2e0b78C5257B54E0AA5D7D1323DFbc08E9CE"
+    }
   }
 ]

@@ -4,9 +4,9 @@ import { useEffect, useState, useMemo } from 'react';
 import { useAccount, useSwitchChain, useReadContract, useWriteContract } from 'wagmi';
 import { ethers } from 'ethers';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
+import { updateAndSaveChain } from "@/app/hooks/useUpdateAndSaveChain";
 
 export default function DeployContract() {
-    // const account = useAccount();
     const rawAccount = useAccount();
 
     const account = useMemo(() => rawAccount, [rawAccount?.address]);
@@ -66,7 +66,10 @@ export default function DeployContract() {
 
             const contractAddress = await contract.getAddress();
             setDeployedAddress(contractAddress);
-            
+
+            const chainId = account.chain.id;
+            await updateAndSaveChain(chainsConfig, contractAddress, chainId);
+
         } catch (error) {
             console.error('Deployment error:', error);
             alert(`Deployment failed: ${error.message}`);

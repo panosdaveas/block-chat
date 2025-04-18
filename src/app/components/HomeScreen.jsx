@@ -1,4 +1,5 @@
 'use client';
+// @ts-ignore
 import logo from '@/app/app-logo.svg';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@/app/styles/App.css';

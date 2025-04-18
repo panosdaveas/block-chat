@@ -1,3 +1,5 @@
+"use client";
+
 // utils/contract-utils.js
 import { ethers } from "ethers";
 import { AxelarQueryAPI, Environment } from "@axelar-network/axelarjs-sdk";
