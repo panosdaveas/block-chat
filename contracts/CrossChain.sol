@@ -83,7 +83,7 @@ contract CrossChain is AxelarExecutable {
         string calldata sourceChain,
         string calldata sourceAddress,
         bytes calldata payload
-    ) internal virtual {
+    ) internal override {
         // Decode the payload, now including the original source chain
         (address sender, address recipient, string memory content, string memory originalSourceChain) = 
             abi.decode(payload, (address, address, string, string));
