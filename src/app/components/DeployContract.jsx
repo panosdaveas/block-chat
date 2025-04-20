@@ -14,7 +14,7 @@ export default function DeployContract() {
 
     const [deployedAddress, setDeployedAddress] = useState('');
     const [isDeploying, setIsDeploying] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null)
 
     // State to store data from API
     const { chainsConfig, artifactsData, err, isLoading } = useDeployClient();
@@ -53,7 +53,9 @@ export default function DeployContract() {
                 signer
                 // account.address
             );
-
+            console.log(chainConfig.gateway,
+                chainConfig.gasService,
+                chainName);
             // Deploy with constructor arguments
             const contract = await factory.deploy(
                 chainConfig.gateway,

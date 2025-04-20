@@ -5,7 +5,6 @@ import {
     polygon,
     sepolia,
     avalancheFuji,
-    moonbeam,
     moonbaseAlpha,
     moonbeamDev,
 } from 'wagmi/chains';
@@ -49,12 +48,11 @@ export const config = getDefaultConfig({
         mainnet,
         polygon,
         avalancheFuji,
-        moonbeam,
         moonbeamLocal,
         avalancheLocal,
         moonbaseAlpha,
         moonbeamDev,
-        moonbeam,
+        sepolia,
         ...(process.env.REACT_APP_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
     ],
 });

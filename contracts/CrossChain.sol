@@ -70,7 +70,7 @@ contract CrossChain is AxelarExecutable {
         }
         
         // Send the message across chains
-        gateway.callContract(destinationChain, destinationAddress, payload);
+        gateway().callContract(destinationChain, destinationAddress, payload);
         
         emit MessageSent(msg.sender, recipient, destinationChain, content);
     }

@@ -16,7 +16,7 @@
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
     "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
     "contract": {
-      "address": "0x33872879Ce058fc3DD7a28481141E592a083c4C9"
+      "address": "0xde55c5AA0f9fFBe8B3dD88cEdc918cE26FFAc235"
     }
   },
   {
@@ -36,7 +36,27 @@
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
     "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
     "contract": {
-      "address": "0x74BE2e0b78C5257B54E0AA5D7D1323DFbc08E9CE"
+      "address": "0x8914Ca95350ad2d000a6eE2573430B3d6EBdc34b"
+    }
+  },
+  {
+    "name": "ethereum-sepolia",
+    "chainId": 11155111,
+    "rpc": "https://1rpc.io/sepolia",
+    "gateway": "0xC249632c2D40b9001FE907806902f63038B737Ab",
+    "gasService": "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6",
+    "tokenName": "Sepolia",
+    "tokenSymbol": "ETH",
+    "callContract": "0x9372350Abb3B5c10DB1BB858e0bCf91eFa74d946",
+    "constAddressDeployer": "0xd5bf7311032fe5dde956de6f2916f135a140e7dd",
+    "crossChainToken": "0xb5ADB662B1DebDCc96c4d7c406aDF20F310aEe0B",
+    "tokens": {
+      "aUSDC": "aUSDC"
+    },
+    "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
+    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
+    "contract": {
+      "address": "0x9b46C3945deF12E5dfC7Dab93FFC9Cf93418A583"
     }
   }
 ]

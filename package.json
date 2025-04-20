@@ -11,7 +11,8 @@
     "deploy": "node src/app/interchain/runDeploy.jsx"
   },
   "dependencies": {
-    "@axelar-network/axelarjs-sdk": "^0.17.2",
+    "@axelar-network/axelarjs-sdk": "^0.15.0",
+    "@axelar-network/axelar-gmp-sdk-solidity": "^6.0.0",
     "@rainbow-me/rainbowkit": "^2.2.4",
     "@tanstack/react-query": "^5.74.4",
     "drand-client": "^1.3.0-rc2",
