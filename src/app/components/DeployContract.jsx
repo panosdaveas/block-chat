@@ -23,7 +23,7 @@ export default function DeployContract() {
     useEffect(() => {
         if (chainsConfig) {
             const chainConfig = chainsConfig.find(chain => chain.chainId == account.chain.id);
-            if (chainConfig.contract && chainConfig.contract.address) {
+            if (chainConfig?.contract && chainConfig?.contract.address) {
                 setIsDeployed(true);
                 return;
             }
