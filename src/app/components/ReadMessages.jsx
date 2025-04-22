@@ -170,7 +170,7 @@ export default function ContractInteraction() {
                 </div>
             )}
 
-            <div>
+            {/* <div>
                 <h3 className="font-bold">Write Contract</h3>
                 <button
                     onClick={handleWriteFunction}
@@ -179,7 +179,7 @@ export default function ContractInteraction() {
                 >
                     {isLoadingMessages ? 'Processing...' : 'Write to Contract'}
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 }

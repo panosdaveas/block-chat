@@ -15,9 +15,20 @@ export default function DeployContract() {
     const [deployedAddress, setDeployedAddress] = useState('');
     const [isDeploying, setIsDeploying] = useState(false);
     const [error, setError] = useState(null)
+    const [isDeployed, setIsDeployed] = useState(false);
 
     // State to store data from API
     const { chainsConfig, artifactsData, err, isLoading } = useDeployClient();
+
+    useEffect(() => {
+        if (chainsConfig) {
+            const chainConfig = chainsConfig.find(chain => chain.chainId == account.chain.id);
+            if (chainConfig.contract && chainConfig.contract.address) {
+                setIsDeployed(true);
+                return;
+            }
+        }
+    }, [chainsConfig]);
 
     // Fetch configurations on component mount
     async function deployContract() {
@@ -71,6 +82,7 @@ export default function DeployContract() {
 
             const chainId = account.chain.id;
             await updateAndSaveChain(chainsConfig, contractAddress, chainId);
+            setIsDeployed(true);
 
         } catch (error) {
             console.error('Deployment error:', error);
@@ -92,7 +104,7 @@ export default function DeployContract() {
                     <p>Connected to: <span className="font-semibold">{account.chain.name}</span></p>
                 </div>
             )}
-
+            {!isDeployed && (
             <button
                 onClick={deployContract}
                 disabled={isDeploying || !account.address || !account.chain}
@@ -100,7 +112,10 @@ export default function DeployContract() {
             >
                 {isDeploying ? 'Deploying...' : 'Deploy Contract'}
             </button>
-
+            )}
+            {isDeployed && (
+                <p className="font-semibold text-green-800">Contract deployed </p>
+            )}
             {deployedAddress && (
                 <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded">
                     <p className="font-semibold text-green-800">Contract deployed successfully!</p>

@@ -32,15 +32,16 @@ async function estimateGasForDestinationChain(sourceChain, destinationChain, pay
 export default function SendMessage() {
     const { address, chain, chainId } = useAccount();
     const { chainsConfig, artifactsData, err, isLoading } = useDeployClient();
-    const [isLoadingClient, setIsLoadingClient] = useState(null);
     const [chainSource, setChainSource] = useState(null);
     // const [chainDest, setChainDest] = useState(null);
     const [contractAddress, setContractAddress] = useState(null);
     const [error, setError] = useState(null);
-    const [chainsList, setChainsList] = useState([]);
-    const [isSending, setIsSending] = useState(null);
+    const [availableChainsList, setAvailableChainsList] = useState([]);
+    const [isSending, setIsSending] = useState(false);
     const { writeContractAsync } = useWriteContract();
     const [abi, setAbi] = useState(null);
+    const [selectedDestChain, setSelectedDestChain] = useState("avalanche");
+    const [availableChains, setAvailableChains] = useState([]);
 
     // Set contract address when chainId changes AND chainsConfig is loaded
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function SendMessage() {
             if (chain && chain.contract && list && artifactsData.abi) {
                 setChainSource(chain);
                 setContractAddress(chain.contract.address);
-                setChainsList(list);
+                setAvailableChainsList(list);
                 setAbi(artifactsData.abi);
             } else {
                 setError(`No contract found for chain ID: ${chainId}`);
@@ -59,10 +60,9 @@ export default function SendMessage() {
         }
     }, [chainId, chainsConfig, artifactsData]);
 
-    setIsSending(true);
 
-    async function sendMessage(formData) {
-        if (!chainsConfig || !abi || !address || !artifactsData.abi || !formData.destinationChainName || !chainSource) return;
+    async function handleWriteFunction(formData) {
+        if (!chainsConfig || !abi || !address || !artifactsData.abi || !formData.destinationChainName || !chainSource || formData.recipientAddress) return;
 
         const chainDest = chainsConfig.find(chain => chain.name == formData.destinationChainName);
 
@@ -75,6 +75,9 @@ export default function SendMessage() {
         );
 
         try {
+            console.log(formData);
+            console.log(chainDest.contract.address);
+            setIsSending(true);
             const data = await writeContractAsync({
                 abi: abi,
                 address: contractAddress,
@@ -91,7 +94,7 @@ export default function SendMessage() {
             });
 
             console.log(data);
-            
+
             // const { isLoading, isSuccess } = useWaitForTransactionReceipt({
             //     hash: data?.hash,
             // })
@@ -105,7 +108,32 @@ export default function SendMessage() {
 
     }
 
-    return(
-        <></>
+    return (
+        <div className="p-4 mb-4">
+            <h3 className="font-bold">Write Contract</h3>
+            <form action={handleWriteFunction}>
+                <input name='recipientAddress'></input>
+                <input name='content'></input>
+                <select name='destinationChainName'
+                    value={selectedDestChain}
+                    onChange={e => setSelectedDestChain(e.target.value)}
+                >
+                    {availableChainsList.map((c, index) => <option key={index} value={c.name}>{c.name}</option>)}
+                </select>
+                {error && (
+                    <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                        Error: {error}
+                    </div>
+                )}
+                <button
+                    type='submit'
+                    onClick={handleWriteFunction}
+                    disabled={!contractAddress || isLoading || !chainsConfig}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+                >
+                    {isLoading ? 'Processing...' : 'Write to Contract'}
+                </button>
+            </form>
+        </div>
     );
 }
