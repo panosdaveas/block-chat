@@ -85,7 +85,7 @@ export default function ContractInteraction() {
             return;
         }
 
-        const payload = "Hello from Avalanche!"
+        const payload = "Test message from Avalanche!"
 
         const gasAmount = await estimateGasForDestinationChain(
             "avalanche",

@@ -108,9 +108,8 @@ export default function SendMessage() {
                     formData.destinationChainName,
                     chainDest.contract.address,
                     formData.recipientAddress,
-                    formData.content,
                 ],
-                value: gasAmount,
+                // value: gasAmount,
                 chain,
                 account: address,
             });
