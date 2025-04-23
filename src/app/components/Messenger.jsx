@@ -3,8 +3,9 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import '../styles/Chat.css';
 import { useAccount } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useChainData } from '../hooks/useChainData';
-import { userBReadsMessages } from '@/app/contracts/ContractHandlers.jsx';
+import { useChainsClient } from '@/app/hooks/useChainsClient';
+// import { userBReadsMessages } from '@/app/contracts/ContractHandlers.jsx';
+import { useContractAbi } from '@/app/hooks/useContractAbi';
 
 // Message component that displays individual messages
 const Message = ({ sender, message, time, isUser }) => {
@@ -28,14 +29,35 @@ export default function Chat() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const messagesEndRef = useRef(null);
+    const { abi } = useContractAbi();
 
     // Get account from web3 provider
     const account = useAccount();
 
-    const { chains, loading, err } = useChainData();
+    const { chains, loading, err } = useChainsClient();
     // Memoize chains to avoid unnecessary re-renders
 
     const fetchMessages = async () => {
+
+        const { data, isLoading: isLoadingMessages } = useReadContract({
+            abi,
+            address: contractAddress,
+            functionName: 'getAllMessages',
+            chainId,
+            account: address,
+            // Only run when contractAddress, chainId, and abi are available
+            // enabled: !!contractAddress && !!chainId && !!abi,
+        });
+
+        // Update messages when data changes
+        useEffect(() => {
+            if (data) {
+                setMessages(data);
+            }
+            console.log(data);
+            setIsLoading(isLoadingMessages || isLoadingConfig);
+        }, [data, isLoadingMessages, isLoadingConfig]);
+        
         if (!account || !account.chain) return;
 
         try {
@@ -43,8 +65,7 @@ export default function Chat() {
             setError(null);
 
             const chain = chains.find(chain =>
-                // chain.name === account.chain.name.toLowerCase()
-                chain.name === 'Avalanche'
+                chain.name === account.chain
             );
 
             if (!chain) {
@@ -148,7 +169,7 @@ export default function Chat() {
                             placeholder="Type your message..."
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
-                            rows="2"
+                            rows={2}
                         />
                         <button
                             type="submit"

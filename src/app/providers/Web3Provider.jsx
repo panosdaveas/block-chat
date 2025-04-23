@@ -14,10 +14,12 @@ const myTheme = merge(darkTheme(), {
         modalOverlay: 'none',
     },
     colors: {
+
+    //  #bfdbfe;
         accentColor: '#61DAFB',
         accentColorForeground: '#282c34',
-        connectButtonText: '#61DAFB',
-        connectButtonBackground: '#282c34',
+        connectButtonText: '#bfdbfe',
+        connectButtonBackground: '#1A1B1F',
     },
     fonts: {
         body: 'inherit',

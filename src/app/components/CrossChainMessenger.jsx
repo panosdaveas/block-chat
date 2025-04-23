@@ -1,18 +1,17 @@
 'use client';
-// components/CrossChainMessenger.jsx
+
 import { useState } from 'react';
-import { ethers } from 'ethers';
 import { useContractAbi } from '../hooks/useContractAbi';
-import { useChainData } from '../hooks/useChainData';
+import { useChainsClient } from '../hooks/useChainsClient';
 import { sendMessage, readAllMessages } from '../hooks/useContractUtils';
 import { useAccount } from 'wagmi';
 
 export default function CrossChainMessenger() {
-    const { chains, loading: chainsLoading } = useChainData();
+    const { chains, loading: chainsLoading } = useChainsClient();
     const { contractAbi, loading: abiLoading } = useContractAbi();
     const address = useAccount().address;
     const provider = useAccount().chain.rpcUrls.default.http;
-    const { data: signer } = useAccount();
+    const signer = useAccount();
 
     const [sourceChain, setSourceChain] = useState('');
     const [destChain, setDestChain] = useState('');
@@ -178,7 +177,7 @@ export default function CrossChainMessenger() {
                             className="w-full p-2 border rounded"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            rows="4"
+                            rows={4}
                             required
                         ></textarea>
                     </div>

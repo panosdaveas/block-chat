@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo } from 'react';
-import { useAccount, useSwitchChain, useReadContract, useWriteContract } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { ethers } from 'ethers';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
 import { updateAndSaveChain } from "@/app/hooks/useUpdateAndSaveChain";
@@ -9,26 +9,30 @@ import { updateAndSaveChain } from "@/app/hooks/useUpdateAndSaveChain";
 export default function DeployContract() {
     const rawAccount = useAccount();
 
-    const account = useMemo(() => rawAccount, [rawAccount?.address]);
+    const account = useMemo(() => rawAccount, [rawAccount?.address, rawAccount?.chain?.id]);
     const { switchChain } = useSwitchChain();
 
     const [deployedAddress, setDeployedAddress] = useState('');
     const [isDeploying, setIsDeploying] = useState(false);
     const [error, setError] = useState(null)
     const [isDeployed, setIsDeployed] = useState(false);
+    const [contractAddress, setContractAddress] = useState(null);
 
     // State to store data from API
     const { chainsConfig, artifactsData, err, isLoading } = useDeployClient();
 
     useEffect(() => {
-        if (chainsConfig) {
+        if (account?.chainId && chainsConfig) {
+            setIsDeployed(false);
+            setContractAddress(null);
             const chainConfig = chainsConfig.find(chain => chain.chainId == account.chain.id);
             if (chainConfig?.contract && chainConfig?.contract.address) {
                 setIsDeployed(true);
+                setContractAddress(chainConfig.contract.address);
                 return;
             }
         }
-    }, [chainsConfig]);
+    }, [chainsConfig, account?.chainId]);
 
     // Fetch configurations on component mount
     async function deployContract() {
@@ -50,6 +54,8 @@ export default function DeployContract() {
             // Check if we need to switch networks
             if (account.chain.id !== chainConfig.chainId && switchChain) {
                 await switchChain(chainConfig.chainId);
+                // setIsDeployed(false);
+                // setDeployedAddress('');
                 return; // The component will re-render when network changes
             }
 
@@ -122,6 +128,21 @@ export default function DeployContract() {
                     <p className="mt-2">Address: <span className="font-mono">{deployedAddress}</span></p>
                 </div>
             )}
+
+            <h2 className="text-xl font-bold mb-4">Contract Interaction</h2>
+
+            {!account.chainId && (
+                <div className="mb-4 p-2 bg-yellow-100 text-yellow-700 rounded">
+                    Not connected to any chain. Please connect your wallet.
+                </div>
+            )}
+
+            <div className="mb-4">
+                <p>Chain ID: {account.chainId || 'Not connected'}</p>
+                <p>Chain Name: {account.chain?.name || 'Not connected'}</p>
+                <p>Contract Address: {contractAddress || 'Not set'}</p>
+            </div>
+
         </div>
     );
 }

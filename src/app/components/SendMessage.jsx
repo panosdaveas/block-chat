@@ -1,10 +1,10 @@
+// @ts-nocheck
 "use client"
 
 import { useState, useEffect } from 'react';
-// @ts-ignore
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi';
+import { useWriteContract, useAccount } from 'wagmi';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
-import { AxelarQueryAPI, Environment, CHAINS } from "@axelar-network/axelarjs-sdk";
+import { AxelarQueryAPI, Environment } from "@axelar-network/axelarjs-sdk";
 
 async function estimateGasForDestinationChain(sourceChain, destinationChain, payload) {
     try {
@@ -27,19 +27,8 @@ async function estimateGasForDestinationChain(sourceChain, destinationChain, pay
     }
 }
 
-// async function calculateBridgeFee(source, destination, options = {}) {
-//     const api = new AxelarQueryAPI({ environment: Environment.TESTNET });
-//     const { gasLimit } = options;
-
-//     const sourceChain = CHAINS.TESTNET[source.name.toUpperCase()] || CHAINS.TESTNET.AVALANCHE;
-//     const destChain = CHAINS.TESTNET[destination.name.toUpperCase()] || CHAINS.TESTNET.FANTOM;
-
-//     return api.estimateGasFee(sourceChain, destChain, gasLimit || 700000, 'auto');
-// }
-
 export default function SendMessage() {
     const { address, chain, chainId } = useAccount();
-    // @ts-ignore
     const { chainsConfig, artifactsData, err, isLoading } = useDeployClient();
     const [chainSource, setChainSource] = useState(null);
     const [contractAddress, setContractAddress] = useState(null);
@@ -121,29 +110,24 @@ export default function SendMessage() {
     }
 
     return (
-        <div className="p-4 mb-4">
-            <h3 className="font-bold">Write Contract</h3>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                const formData = {
-                    // @ts-ignore
-                    recipientAddress: e.target.recipientAddress.value,
-                    // @ts-ignore
-                    content: e.target.content.value,
-                    destinationChainName: selectedDestChain
-                };
-                handleWriteFunction(formData);
-            }}>
-                <div className="mb-2">
-                    <label className="block text-sm mb-1">Recipient Address:</label>
-                    <input name='recipientAddress' className="w-full p-2 border rounded" placeholder="0x..." required />
+            <div>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = {
+                        recipientAddress: e.target.recipientAddress.value,
+                        content: e.target.content.value,
+                        destinationChainName: selectedDestChain
+                    };
+                    handleWriteFunction(formData);
+                }}>
+                <div>
+                    <input name='recipientAddress' placeholder="0x..." required />
                 </div>
-                <div className="mb-2">
-                    <label className="block text-sm mb-1">Message Content:</label>
-                    <input name='content' className="w-full p-2 border rounded" placeholder="Your message" required />
+                <div>
+                    <input name='content' placeholder="Your message" required />
                 </div>
-                <div className="mb-4">
-                    <label className="block text-sm mb-1">Destination Chain:</label>
+                <div>
                     <select
                         name='destinationChainName'
                         value={selectedDestChain}
@@ -159,9 +143,9 @@ export default function SendMessage() {
                     </div>
                 )}
                 <button
+                    className='send-button'
                     type='submit'
                     disabled={!contractAddress || isLoading || !chainsConfig || isSending}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
                 >
                     {isSending ? 'Processing...' : 'Write to Contract'}
                 </button>

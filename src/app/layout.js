@@ -3,8 +3,8 @@ import "@/app/styles/index.css";
 import WalletProvider from "./providers/Web3Provider";
 
 export const metadata = {
-  title: "Block-Chat",
-  description: "the state of being connected with each other.",
+  title: "BlockChat",
+  description: "The state of being connected with each other.",
 };
 
 export default function RootLayout({ children }) {
