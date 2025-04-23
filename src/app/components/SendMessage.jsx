@@ -94,12 +94,6 @@ export default function SendMessage() {
                 formData.content
             );
 
-            // const gasAmount = await calculateBridgeFee(
-            //     chainSource,
-            //     chainDest,
-            //     { gasLimit: 700000 }
-            // );
-
             const data = await writeContractAsync({
                 abi: abi,
                 address: contractAddress,
@@ -108,8 +102,9 @@ export default function SendMessage() {
                     formData.destinationChainName,
                     chainDest.contract.address,
                     formData.recipientAddress,
+                    formData.content,
                 ],
-                // value: gasAmount,
+                value: gasAmount,
                 chain,
                 account: address,
             });
