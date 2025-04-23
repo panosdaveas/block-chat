@@ -9,7 +9,7 @@
 
 .chat-window {
     width: 100%;
-    max-width: 500px;
+    max-width: 540px;
     height: 75%;
     background-color: #1A1B1F;
     border-radius: 8px;
@@ -20,11 +20,11 @@
 
 .chat-header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     background-color: #1A1B1F;
     color: #61DAFB;
-    padding: 12px 16px;
+    padding: 12px 32px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     font-size: 1rem;

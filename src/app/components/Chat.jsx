@@ -3,11 +3,13 @@
 
 import '../styles/Chat.css';
 import ReadAndDisplayMessages from './ReadMessages';
-import SendMessage from './SendMessage';
+// import SendMessage from './SendMessage';
+import SendMessage from './PromptBasedInput';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function ChatDisplay() {
     return (
+        <div>
         <div className="chat-container">
             <div className="chat-window">
                 {/* Chat header */}
@@ -25,8 +27,8 @@ export default function ChatDisplay() {
                 </div>
                 <ReadAndDisplayMessages />
                 <SendMessage />
-            
             </div>
         </div>
+</div>
     );
 }

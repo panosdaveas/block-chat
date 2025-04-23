@@ -110,8 +110,9 @@ export default function SendMessage() {
     }
 
     return (
-            <div>
+        <div className="message-form-container">
             <form
+                className="message-form"
                 onSubmit={(e) => {
                     e.preventDefault();
                     const formData = {
@@ -120,34 +121,49 @@ export default function SendMessage() {
                         destinationChainName: selectedDestChain
                     };
                     handleWriteFunction(formData);
-                }}>
-                <div>
-                    <input name='recipientAddress' placeholder="0x..." required />
+                }}
+            >
+                <div className="input-group">
+                    <input
+                        name="recipientAddress"
+                        placeholder="Recipient address (0x...)"
+                        className="form-input recipient-input"
+                        required
+                    />
                 </div>
-                <div>
-                    <input name='content' placeholder="Your message" required />
+                <div className="input-group">
+                    <input
+                        name="content"
+                        placeholder="Type your message..."
+                        className="form-input message-input"
+                        required
+                    />
                 </div>
-                <div>
+                <div className="input-group">
                     <select
-                        name='destinationChainName'
+                        name="destinationChainName"
                         value={selectedDestChain}
-                        onChange={e => setSelectedDestChain(e.target.value)}
-                        className="w-full p-2 border rounded"
+                        onChange={(e) => setSelectedDestChain(e.target.value)}
+                        className="form-select"
                     >
-                        {availableChainsList.map((c, index) => <option key={index} value={c.name}>{c.name}</option>)}
+                        {availableChainsList.map((c, index) => (
+                            <option key={index} value={c.name}>
+                                {c.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 {error && (
-                    <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                    <div className="error-message">
                         Error: {error.toString()}
                     </div>
                 )}
                 <button
-                    className='send-button'
-                    type='submit'
+                    className="send-button"
+                    type="submit"
                     disabled={!contractAddress || isLoading || !chainsConfig || isSending}
                 >
-                    {isSending ? 'Processing...' : 'Write to Contract'}
+                    {isSending ? 'Processing...' : 'Send Message'}
                 </button>
             </form>
         </div>

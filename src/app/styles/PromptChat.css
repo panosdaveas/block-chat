@@ -1,0 +1,207 @@
+/* Prompt Chat Styles */
+.prompt-chat-container {
+    /* width: 100%; */
+    /* margin-top: 1rem; */
+    padding: 12px 16px;
+}
+
+.prompt-chat-box {
+    /* border: 1px solid #e1e4e8; */
+    /* border-radius: 8px; */
+    background-color: #1A1B1F;
+    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
+    overflow: hidden;
+}
+
+.message-input-wrapper {
+    position: relative;
+}
+
+.prompt-textarea {
+    background-color: #1A1B1F;
+    /* color: #bfdbfe; */
+    color: #bfdbfe;
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+    border: none;
+    resize: vertical;
+    min-height: 60px;
+    outline: none;
+    font-family: inherit;
+    border-top: 1px dotted #6b7280;
+}
+
+.suggestions-box {
+    position: absolute;
+    bottom: 100%;
+    left: 16px;
+    width: calc(100% - 32px);
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    /* border: 1px solid #e1e4e8; */
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.suggestions-header {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #586069;
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.suggestion-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+    background-color: #f6f8fa;
+}
+
+.prompt-chat-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    /* background-color: #f6f8fa; */
+    background-color: #1A1B1F;
+}
+
+.selection-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    /* font-size: small; */
+}
+
+.selection-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: small;
+    color: #24292e;
+}
+
+.address-tag {
+    background-color: #e1f5fe;
+    border: 1px solid #b3e5fc;
+}
+
+.chain-tag {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+}
+
+.tag-remove {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #586069;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+}
+
+.error-message {
+    font-size: small;
+    padding: 10px 16px;
+    background-color: #ffeef0;
+    color: #d73a49;
+    /* border-top: 1px solid #f9d0d5; */
+}
+
+.prompt-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    margin-top: 8px;
+    background-color: #f6f8fa;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #586069;
+}
+
+.hint-icon {
+    font-size: 16px;
+}
+
+.hint-text {
+    flex: 1;
+}
+
+/* Add these to your existing CSS */
+.add-new {
+    /* border-top: 1px solid #e1e4e8; */
+    margin-top: 5px;
+    padding-top: 10px;
+}
+
+.add-new input {
+    width: 100%;
+    padding: 6px 8px;
+    /* border: 1px solid #e1e4e8; */
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-new input:focus {
+    outline: none;
+    /* border-color: #0366d6; */
+    box-shadow: 0 0 0 2px rgba(3, 102, 214, 0.2);
+}
+
+/* Make sure suggestion box appears in the right place */
+.suggestions-box {
+    position: relative;
+    top: 0;
+    left: 16px;
+    transform: translateY(-100%);
+    width: calc(100% - 32px);
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    /* border: 1px solid #e1e4e8; */
+    border-radius: 6px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.send-button {
+    background-color: #282c34;
+    color: #61DAFB;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    outline: none;
+    font-size: 1rem;
+}
+
+.send-button:hover {
+    background-color: transparent;
+    color: #61DAFB
+}
