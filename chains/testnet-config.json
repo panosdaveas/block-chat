@@ -16,7 +16,7 @@
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
     "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
     "contract": {
-      "address": "0xde55c5AA0f9fFBe8B3dD88cEdc918cE26FFAc235"
+      "address": "0xe5d22B0A435D803EC80105a5869faB92b82C36B6"
     }
   },
   {
@@ -36,7 +36,7 @@
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
     "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
     "contract": {
-      "address": "0x8914Ca95350ad2d000a6eE2573430B3d6EBdc34b"
+      "address": "0x6Ed578E778E31F3118590B6187bFB5F42cdE9960"
     }
   },
   {
@@ -54,9 +54,6 @@
       "aUSDC": "aUSDC"
     },
     "messageSender": "0x1eF3650025E8C02eC704a131c59367fc28130a31",
-    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F",
-    "contract": {
-      "address": "0x9b46C3945deF12E5dfC7Dab93FFC9Cf93418A583"
-    }
+    "messageReceiver": "0x8eb0B05f874506ba5b416492DFB455bc1155156F"
   }
 ]

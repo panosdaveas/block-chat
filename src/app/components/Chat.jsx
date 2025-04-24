@@ -3,7 +3,6 @@
 
 import '../styles/Chat.css';
 import ReadAndDisplayMessages from './ReadMessages';
-// import SendMessage from './SendMessage';
 import SendMessage from './PromptBasedInput';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
@@ -25,6 +24,7 @@ export default function ChatDisplay() {
                             showBalance={false}
                         />
                     </div>
+                     {/* Chat body */}
                     <ReadAndDisplayMessages />
                     <SendMessage />
                 </div>

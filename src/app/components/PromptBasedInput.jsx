@@ -7,6 +7,7 @@ import { useWriteContract, useAccount } from 'wagmi';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
 import { AxelarQueryAPI, Environment } from "@axelar-network/axelarjs-sdk";
 import { useMessages } from '@/app/providers/MessagesProvider';
+import { BeatLoader } from "react-spinners";
 
 async function estimateGasForDestinationChain(sourceChain, destinationChain, payload) {
     try {
@@ -186,7 +187,7 @@ export default function SendMessage() {
 
             console.log("Transaction submitted:", data);
             // Reset form after successful submission
-            setMessage("Transaction submitted:", data);
+            setMessage("Transaction submitted!", data);
             // setSelectedAddress('');
             // setSelectedChain('');
             setPendingAddress('');
@@ -195,7 +196,7 @@ export default function SendMessage() {
 
         } catch (err) {
             console.error("Transaction failed:", err);
-            setError(err.message || "Transaction failed");
+            setError("Transaction failed");
         } finally {
             setIsSending(false);
         }
@@ -310,7 +311,14 @@ export default function SendMessage() {
                         onClick={handleSubmit}
                         disabled={!contractAddress || isLoading || !chainsConfig || isSending}
                     >
-                        {isSending ? 'Processing...' :
+                        {isSending ? 
+                        <BeatLoader
+                                color='#61DAFB'
+                                size={12}
+                                speedMultiplier={0.5}
+                        />
+                        // 'Processing...' 
+                        :
                             <svg
                                 style={{ transform: 'rotate(-90deg)' }}
                                 fill="none"
@@ -332,7 +340,13 @@ export default function SendMessage() {
                 </div>
             </div>
             <div className="prompt-hint">
-                <span className="hint-icon">💡</span>
+                {/* <span className="hint-icon">💡</span> */}
+                <span className="hint-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                </svg>
+                
+                </span>
                 <span className="hint-text">Use <strong>@</strong> to tag recipient address and <strong>#</strong> to select destination chain</span>
             </div>
         </div>

@@ -29,6 +29,9 @@ contract CrossChain is AxelarExecutable {
     
     // Mapping of recipient address to their messages
     mapping(address => Message[]) private userMessages;
+
+    // Add a new mapping to track sent messages
+    mapping(address => Message[]) private sentMessages;
     
     event MessageSent(address indexed sender, address indexed recipient, string destinationChain, string content);
     event MessageReceived(address indexed sender, address indexed recipient, string sourceChain, string content);
@@ -67,6 +70,17 @@ contract CrossChain is AxelarExecutable {
                 payload,
                 msg.sender
             );
+
+        sentMessages[msg.sender].push(Message({
+            sender: msg.sender,
+            recipient: recipient,
+            content: content,
+            timestamp: block.timestamp,
+            isRead: false,
+            sourceChain: currentChain,
+            destinationChain: destinationChain
+        }));
+            
         }
         
         // Send the message across chains
@@ -139,6 +153,13 @@ contract CrossChain is AxelarExecutable {
     function getAllMessages() external view returns (Message[] memory) {
         return userMessages[msg.sender];
     }
+
+    /**
+     * @dev Get all messages for the sender
+     */
+    function getSentMessages() external view returns (Message[] memory) {
+        return sentMessages[msg.sender];
+}
     
     /**
      * @dev Get the name of the current chain

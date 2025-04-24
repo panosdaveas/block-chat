@@ -28,10 +28,10 @@ export default function ReadAndDisplayMessages() {
     const [contractAddress, setContractAddress] = useState(null);
     const [loading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    // const [messages, setMessages] = useState([]);
+    const [sentMessages, setSentMessages] = useState([]);
 
     const { messages, setMessages } = useMessages();
-    const { address, chainId } = useAccount();
+    const { address, chain, chainId } = useAccount();
     const { abi } = useContractAbi();
     const { chainsConfig, isLoading: isLoadingConfig } = useDeployClient();
 
@@ -44,6 +44,7 @@ export default function ReadAndDisplayMessages() {
             setContractAddress(null);
             setError(null);
             setMessages([]);
+            setSentMessages([]);
             const chainConfig = chainsConfig.find(chain => chain.chainId == chainId);
             if (chainConfig && chainConfig?.contract) {
                 setContractAddress(chainConfig.contract.address);
@@ -54,7 +55,7 @@ export default function ReadAndDisplayMessages() {
     }, [chainId, chainsConfig]);
 
     // Only enable the read contract when we have all the necessary data
-    const { data, isLoading: isLoadingMessages } = useReadContract({
+    const { data: receivedData, isLoading: isLoadingMessages } = useReadContract({
         abi,
         address: contractAddress,
         functionName: 'getAllMessages',
@@ -62,41 +63,40 @@ export default function ReadAndDisplayMessages() {
         account: address,
     });
 
+    const { data: sentData, isLoading: isLoadingSentMessages } = useReadContract({
+        abi,
+        address: contractAddress,
+        functionName: 'getSentMessages',
+        chainId,
+        account: address,
+    });
+
     // Update messages when data changes
     useEffect(() => {
-        if (data) {
-            const formattedMessages = data.map((msg, index) => ({
+        if (receivedData && sentData && chainId && chainsConfig) {
+            const mergedMessages = [...receivedData, ...sentData];
+            const sortedMergedMessages = mergedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            const formattedMessages = sortedMergedMessages.map((msg, index) => ({
                 id: index,
                 sender: msg.sender,
                 sourceChain: msg.sourceChain,
                 destinationChain: msg.destinationChain,
                 message: msg.content,
-                isUser: msg.sender != address // Check if sender is current user
-                // isUser: msg.sender === address // Check if sender is current user
+                isUser: msg.sourceChain === chainsConfig.find(chain => chain.chainId == chainId).name,
             }));
             setMessages(formattedMessages);
         }
-        setIsLoading(isLoadingMessages || isLoadingConfig);
-    }, [data, isLoadingMessages, isLoadingConfig]);
+        setIsLoading(isLoadingMessages || isLoadingConfig || isLoadingSentMessages);
+    }, [receivedData, sentData, isLoadingMessages, isLoadingConfig, isLoadingSentMessages, chainId, chainsConfig]);
 
     // Scroll to bottom when messages change
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // Show loading state while configs are loading
-    if (isLoadingConfig) {
-        return (
-            <div className="p-4">
-                <p>Loading chain configurations...</p>
-            </div>
-        );
-    }
-
     return (
-        //         {/* Messages area */}
         <div className="messages-area">
-            {messages.map((msg) => (
+            {!isLoadingConfig && (messages.map((msg) => (
                 <Message
                     key={msg.id}
                     sender={msg.sender}
@@ -105,7 +105,10 @@ export default function ReadAndDisplayMessages() {
                     destinationChain={msg.destinationChain}
                     isUser={msg.isUser}
                 />
-            ))}
+            )))}
+            {isLoadingConfig && (
+                    <p className='message-loading'>Loading chain configurations...</p>
+            )}
             <div ref={messagesEndRef} />
             {error && (
                 <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
