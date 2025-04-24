@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useReadContract, useAccount } from 'wagmi';
 import { useContractAbi } from '@/app/hooks/useContractAbi';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
+import { useMessages } from '@/app/providers/MessagesProvider';
 
 const Message = ({ sender, message, sourceChain, destinationChain, isUser }) => {
     return (
@@ -27,12 +28,14 @@ export default function ReadAndDisplayMessages() {
     const [contractAddress, setContractAddress] = useState(null);
     const [loading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const messagesEndRef = useRef(null);
+    // const [messages, setMessages] = useState([]);
 
+    const { messages, setMessages } = useMessages();
     const { address, chainId } = useAccount();
     const { abi } = useContractAbi();
     const { chainsConfig, isLoading: isLoadingConfig } = useDeployClient();
+
+    const messagesEndRef = useRef(null);
 
     // Set contract address when chainId changes AND chainsConfig is loaded
     useEffect(() => {

@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useWriteContract, useAccount } from 'wagmi';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
 import { AxelarQueryAPI, Environment } from "@axelar-network/axelarjs-sdk";
+import { useMessages } from '@/app/providers/MessagesProvider';
 
 async function estimateGasForDestinationChain(sourceChain, destinationChain, payload) {
     try {
@@ -34,26 +35,26 @@ export default function SendMessage() {
     const [chainSource, setChainSource] = useState(null);
     const [contractAddress, setContractAddress] = useState(null);
     const [error, setError] = useState(null);
-    const [availableChainsList, setAvailableChainsList] = useState([]);
     const [isSending, setIsSending] = useState(false);
     const { writeContractAsync } = useWriteContract();
     const [abi, setAbi] = useState(null);
+    const { messages } = useMessages();
 
     // Prompt-based chat states
     const [message, setMessage] = useState('');
-    const [showAddressSuggestions, setShowAddressSuggestions] = useState(false);
-    const [showChainSuggestions, setShowChainSuggestions] = useState(false);
+    const [prevMessage, setPrevMessage] = useState('');
     const [selectedAddress, setSelectedAddress] = useState('');
     const [selectedChain, setSelectedChain] = useState('');
-    const [recentAddresses, setRecentAddresses] = useState([
-        '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
-        '0x7cB57B5A97eAbe94205C07890BE4c1aD31E486A8'
-    ]);
 
-    // Refs for suggestions dropdown
+    // Additional states to track what's currently being typed
+    const [pendingAddress, setPendingAddress] = useState('');
+    const [pendingChain, setPendingChain] = useState('');
+
+    // Store available chains
+    const [availableChains, setAvailableChains] = useState([]);
+
+    // Ref for textarea
     const textareaRef = useRef(null);
-    const addressSuggestionsRef = useRef(null);
-    const chainSuggestionsRef = useRef(null);
 
     // Set contract address when chainId changes AND chainsConfig is loaded
     useEffect(() => {
@@ -64,100 +65,82 @@ export default function SendMessage() {
             if (chain && chain.contract && list && artifactsData.abi) {
                 setChainSource(chain);
                 setContractAddress(chain.contract.address);
-                setAvailableChainsList(list);
                 setAbi(artifactsData.abi);
-                // Set default chain
-                if (list.length > 0 && !selectedChain) {
-                    const otherChains = list.filter(c => c.chainId != chainId);
-                    // if (otherChains.length > 0) {
-                    //     setSelectedChain(otherChains[0].name);
-                    // } else if (list.length > 0) {
-                    //     setSelectedChain(list[0].name);
-                    // }
-                }
+
+                // Store available chains for validation later
+                const chains = list.map(chain => chain.name);
+                setAvailableChains(chains);
             } else {
                 setError(`No contract found for chain ID: ${chainId}`);
             }
         }
     }, [chainId, chainsConfig, artifactsData]);
 
-    // Handle clicks outside the suggestion dropdowns to close them
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (addressSuggestionsRef.current &&
-                !addressSuggestionsRef.current.contains(event.target) &&
-                event.target !== textareaRef.current) {
-                setShowAddressSuggestions(false);
-            }
-            if (chainSuggestionsRef.current &&
-                !chainSuggestionsRef.current.contains(event.target) &&
-                event.target !== textareaRef.current) {
-                setShowChainSuggestions(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    // Parse input for trigger words
+    // Handle input changes and track what's being typed
     const handleInputChange = (e) => {
         const text = e.target.value;
+        setPrevMessage(message);
         setMessage(text);
+        setError(null);
 
-        // Debug
-        console.log("Text input:", text);
-        console.log("Contains @:", text.includes('@'));
-        console.log("Contains #:", text.includes('#'));
-        console.log("Selected address:", selectedAddress);
-        console.log("Selected chain:", selectedChain);
+        // Update pending values
+        updatePendingValues(text);
+    };
 
-        // Check for @address trigger
-        if (text.includes('@')) {
-            console.log("@ detected - should show address suggestions");
-            setShowAddressSuggestions(true);
-            setShowChainSuggestions(false);
+    // Update pending values (what's currently being typed)
+    const updatePendingValues = (text) => {
+        // Check for @ address trigger - what's currently being typed
+        const addressMatch = text.match(/@([^\s#@]+)/);
+        if (addressMatch) {
+            setPendingAddress(addressMatch[1]);
+        } else {
+            setPendingAddress('');
         }
-        // Check for #chain trigger
-        else if (text.includes('#')) {
-            console.log("# detected - should show chain suggestions");
-            setShowChainSuggestions(true);
-            setShowAddressSuggestions(false);
-        }
-        else {
-            setShowAddressSuggestions(false);
-            setShowChainSuggestions(false);
+
+        // Check for # chain trigger - what's currently being typed
+        const chainMatch = text.match(/#([^\s#@]+)/);
+        if (chainMatch) {
+            setPendingChain(chainMatch[1]);
+        } else {
+            setPendingChain('');
         }
     };
 
-    const selectAddress = (address) => {
-        setSelectedAddress(address);
-        setShowAddressSuggestions(false);
+    // Process triggers when space is typed after a value
+    useEffect(() => {
+        // Only process if a new character was added and it's a space
+        if (message.length > prevMessage.length && message.endsWith(' ')) {
+            processMessageForTriggers();
+        }
 
-        // Replace @trigger with selected address
-        const atIndex = message.lastIndexOf('@');
-        const beforeAt = message.substring(0, atIndex);
-        const afterAt = message.substring(atIndex).split(/\s/);
-        afterAt[0] = `@${address}`;
+        // Check if either trigger has been removed entirely
+        if (!message.includes('@') && selectedAddress) {
+            setSelectedAddress('');
+        }
 
-        setMessage(beforeAt + afterAt.join(' '));
-        textareaRef.current.focus();
+        if (!message.includes('#') && selectedChain) {
+            setSelectedChain('');
+        }
+    }, [message, prevMessage]);
+
+    // Process the message text for @ and # triggers when space is pressed
+    const processMessageForTriggers = () => {
+        // If we have a pending address and just typed a space, confirm it
+        if (pendingAddress) {
+            setSelectedAddress(pendingAddress);
+        }
+
+        // If we have a pending chain and just typed a space, confirm it
+        if (pendingChain) {
+            setSelectedChain(pendingChain);
+        }
     };
 
-    const selectChain = (chain) => {
-        setSelectedChain(chain);
-        setShowChainSuggestions(false);
-
-        // Replace #trigger with selected chain
-        const hashIndex = message.lastIndexOf('#');
-        const beforeHash = message.substring(0, hashIndex);
-        const afterHash = message.substring(hashIndex).split(/\s/);
-        afterHash[0] = `#${chain}`;
-
-        setMessage(beforeHash + afterHash.join(' '));
-        textareaRef.current.focus();
+    // Validate Ethereum address format
+    const isValidEthereumAddress = (address) => {
+        // Basic Ethereum address format: 0x followed by 40 hex characters
+        const ethAddressRegex = /^0x[a-fA-F0-9]{40}$/;
+        return ethAddressRegex.test(address);
     };
 
     async function handleWriteFunction(formData) {
@@ -203,9 +186,11 @@ export default function SendMessage() {
 
             console.log("Transaction submitted:", data);
             // Reset form after successful submission
-            setMessage('');
-            setSelectedAddress('');
-            setSelectedChain('');
+            setMessage("Transaction submitted:", data);
+            // setSelectedAddress('');
+            // setSelectedChain('');
+            setPendingAddress('');
+            setPendingChain('');
             setError(null);
 
         } catch (err) {
@@ -217,13 +202,25 @@ export default function SendMessage() {
     }
 
     const handleSubmit = () => {
+        // Validate address
         if (!selectedAddress) {
             setError("Please specify a recipient address using @");
             return;
         }
 
+        if (!isValidEthereumAddress(selectedAddress)) {
+            setError("Invalid Ethereum address format. Address should start with 0x followed by 40 hex characters.");
+            return;
+        }
+
+        // Validate chain
         if (!selectedChain) {
             setError("Please specify a destination chain using #");
+            return;
+        }
+
+        if (!availableChains.includes(selectedChain)) {
+            setError(`Invalid chain name: ${selectedChain}. Please use one of the available chains.`);
             return;
         }
 
@@ -242,6 +239,27 @@ export default function SendMessage() {
         handleWriteFunction(formData);
     };
 
+    // Format address for display
+    const formatAddress = (addr) => {
+        if (!addr) return '';
+        return addr.length > 10 ?
+            `${addr.substring(0, 4)}...${addr.substring(addr.length - 4)}` :
+            addr;
+    };
+
+    // Update the entire message when a tag is removed
+    const removeAddressTag = () => {
+        setSelectedAddress('');
+        const updatedMessage = message.replace(/@[^\s#@]+/, '@');
+        setMessage(updatedMessage);
+    };
+
+    const removeChainTag = () => {
+        setSelectedChain('');
+        const updatedMessage = message.replace(/#[^\s#@]+/, '#');
+        setMessage(updatedMessage);
+    };
+
     return (
         <div className="prompt-chat-container">
             <div className="prompt-chat-box">
@@ -254,60 +272,6 @@ export default function SendMessage() {
                         placeholder="Type your message... (Use @ for recipient address and # for destination chain)"
                         rows={2}
                     />
-
-                    {/* Debug display */}
-                    {/* <div style={{fontSize: '12px', padding: '5px', color: '#666'}}>
-                        showAddressSuggestions: {showAddressSuggestions ? 'true' : 'false'}<br/>
-                        showChainSuggestions: {showChainSuggestions ? 'true' : 'false'}
-                    </div> */}
-
-                    {/* Address suggestions */}
-                    {showAddressSuggestions && (
-                        <div className="suggestions-box" ref={addressSuggestionsRef}>
-                            <div className="suggestions-header">Select recipient address:</div>
-                            <ul className="suggestions-list">
-                                {recentAddresses.map((address, index) => (
-                                    <li
-                                        key={index}
-                                        className="suggestion-item"
-                                        onClick={() => selectAddress(address)}
-                                    >
-                                        {address}
-                                    </li>
-                                ))}
-                                <li className="suggestion-item add-new">
-                                    <input
-                                        type="text"
-                                        placeholder="Enter new address..."
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' && e.target.value) {
-                                                e.preventDefault();
-                                                selectAddress(e.target.value);
-                                            }
-                                        }}
-                                    />
-                                </li>
-                            </ul>
-                        </div>
-                    )}
-
-                    {/* Chain suggestions */}
-                    {showChainSuggestions && (
-                        <div className="suggestions-box" ref={chainSuggestionsRef}>
-                            <div className="suggestions-header">Select destination chain:</div>
-                            <ul className="suggestions-list">
-                                {availableChainsList.map((chain, index) => (
-                                    <li
-                                        key={index}
-                                        className="suggestion-item"
-                                        onClick={() => selectChain(chain.name)}
-                                    >
-                                        {chain.name}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
                 </div>
 
                 {error && (
@@ -320,13 +284,10 @@ export default function SendMessage() {
                     <div className="selection-tags">
                         {selectedAddress && (
                             <div className="selection-tag address-tag">
-                                To: {selectedAddress.substring(0, 6)}...{selectedAddress.substring(selectedAddress.length - 4)}
+                                To: {formatAddress(selectedAddress)}
                                 <button
                                     className="tag-remove"
-                                    onClick={() => {
-                                        setSelectedAddress('');
-                                        setMessage(message.replace(`@${selectedAddress}`, '@'));
-                                    }}
+                                    onClick={removeAddressTag}
                                 >
                                     ×
                                 </button>
@@ -337,10 +298,7 @@ export default function SendMessage() {
                                 Chain: {selectedChain}
                                 <button
                                     className="tag-remove"
-                                    onClick={() => {
-                                        setSelectedChain('');
-                                        setMessage(message.replace(`#${selectedChain}`, '#'));
-                                    }}
+                                    onClick={removeChainTag}
                                 >
                                     ×
                                 </button>
@@ -352,11 +310,27 @@ export default function SendMessage() {
                         onClick={handleSubmit}
                         disabled={!contractAddress || isLoading || !chainsConfig || isSending}
                     >
-                        {isSending ? 'Processing...' : '>'}
+                        {isSending ? 'Processing...' :
+                            <svg
+                                style={{ transform: 'rotate(-90deg)' }}
+                                fill="none"
+                                height="7"
+                                width="14"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <title>Dropdown</title>
+                                <path
+                                    d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001"
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2.5"
+                                />
+                            </svg>
+                        }
                     </button>
                 </div>
             </div>
-
             <div className="prompt-hint">
                 <span className="hint-icon">💡</span>
                 <span className="hint-text">Use <strong>@</strong> to tag recipient address and <strong>#</strong> to select destination chain</span>

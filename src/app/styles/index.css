@@ -37,17 +37,13 @@ button:hover {
 }
 
 button:active {
-    background-color: #282c34;
+    background-color: transparent;
     color: #61DAFB;
     box-shadow: none;
 }
 
 button:disabled {
-    background-color: #ccc;
-    color: #666;
+    background-color: transparent;
+    color: #61DAFB;
     cursor: not-allowed;
-}
-
-.messages-area::-webkit-scrollbar {
-    display: none;
 }

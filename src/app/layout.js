@@ -1,6 +1,7 @@
 // import "./globals.css";
 import "@/app/styles/index.css";
 import WalletProvider from "./providers/Web3Provider";
+import { MessagesProvider } from "./providers/MessagesProvider";
 
 export const metadata = {
   title: "BlockChat",
@@ -11,7 +12,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <WalletProvider>{children}</WalletProvider>
+        <WalletProvider>
+          <MessagesProvider>
+            {children}
+          </MessagesProvider>
+        </WalletProvider>
       </body>
     </html>
   );
