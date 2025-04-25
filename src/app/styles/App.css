@@ -1,10 +1,17 @@
 .App {
+    min-height: 100vh;
     text-align: center;
+    background-color: #282c34;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .App-logo {
     height: 40vmin;
     pointer-events: none;
+    width: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,15 +21,15 @@
 }
 
 .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
+    max-height: 75vh;
+    max-width: 540px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
-    /* gap: 16px; */
+    gap: 16px;
 }
 
 .App-link {
@@ -39,12 +46,12 @@
     }
 }
 
-button {
+.App button {
     background-color: #61DAFB;
     color: #282c34;
     border: none;
     border-radius: 6px;
-    padding: 10px 20px;
+    padding: 6px 14px;
     font-family: inherit;
     /* font-size: 1rem; */
     font-size: calc(10px + 2vmin);
@@ -55,8 +62,16 @@ button {
     outline: none;
 }
 
-button:hover {
+.App button:hover {
     background-color: transparent;
     color: #61DAFB;
     transition: background-color 0.3s ease-in-out;
+}
+
+.App button:active {
+    background-color: transparent;
+}
+
+.App p {
+    margin: 0;
 }

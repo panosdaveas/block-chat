@@ -1,5 +1,6 @@
 // app/utils/updateAndSaveChain.js (or wherever)
 export async function updateAndSaveChain(chainsConfig, contractAddress, chainId) {
+    
     if (!contractAddress || !chainsConfig?.length || !chainId) return;
 
     const updatedChains = chainsConfig.map((chain) =>

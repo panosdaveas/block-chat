@@ -1,0 +1,132 @@
+.Content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #282c34;
+}
+
+.Content-window {
+    width: 100%;
+    max-width: 540px;
+    height: 75%;
+    background-color: #1A1B1F;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 16px 32px;
+    position: relative;
+}
+
+.Content-header {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    vertical-align: baseline;
+    align-items: baseline;
+    background-color: #1A1B1F;
+    color: #61DAFB;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-size: 1rem;
+    text-decoration: none;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px dotted #6b7280;
+}
+
+.Content-header.child {
+    align-self: flex-end;
+    display: inline-flex;
+}
+
+.Content-header h2 {
+    color: #61DAFB;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.Content-footer {
+    position: absolute;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    bottom: 0;
+    right: 0;
+    padding: 32px;
+    margin-top: 32px;
+    gap: 32px;
+}
+
+.messages-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    overflow: auto;
+    -ms-overflow-style: none;
+    /* IE 11 */
+    scrollbar-width: none;
+    /* Firefox 64 */
+}
+
+.message {
+    text-align: left;
+    color: white;
+    margin: 4px 0;
+    font-size: 1rem;
+    word-wrap: break-word;
+    /* Allows long words to be broken */
+    overflow-wrap: break-word;
+    /* Modern version of word-wrap */
+    white-space: normal;
+    /* Ensures text wraps */
+    max-width: 100%;
+    /* Constrains to parent width */
+}
+
+.message-warning {
+    text-align: left;
+    margin: 4px 0;
+    color: #bfdbfe;
+    font-size: 1rem;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.message::before {
+    content: "> ";
+    color: #586069;
+    /* optional: style the prefix */
+    margin-right: 4px;
+    /* optional: space between prefix and text */
+}
+
+.send-button {
+    background-color: #282c34;
+    color: #61DAFB;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    outline: none;
+    font-size: 1rem;
+}
+
+.send-button:hover {
+    background-color: transparent;
+    color: #61DAFB
+}

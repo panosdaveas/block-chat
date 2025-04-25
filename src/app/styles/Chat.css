@@ -26,10 +26,11 @@
     align-items: baseline;
     background-color: #1A1B1F;
     color: #61DAFB;
-    padding: 12px 32px;
+    padding: 16px 32px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     font-size: 1rem;
+    text-decoration: none;
 }
 
 .chat-header.child {
@@ -38,12 +39,9 @@
 }
 
 .chat-header h2 {
+    color: #61DAFB;
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 0;
-}
-
-.chat-header ConnectButton {
     margin: 0;
 }
 
@@ -84,6 +82,7 @@
     border-radius: 8px;
     padding: 8px 16px;
     max-width: 70%;
+    cursor: default;
 }
 
 .user-message .message-bubble {
@@ -161,9 +160,9 @@
     padding: 0;
 }
 
-button {
+/* ConnectButton {
     font-size: 1rem;
-}
+} */
 
 .send-button {
     background-color: #282c34;
@@ -189,4 +188,8 @@ button {
 /* For better scrolling experience */
 .messages-area::-webkit-scrollbar {
     display: none;
+}
+
+a {
+    text-decoration: none;
 }

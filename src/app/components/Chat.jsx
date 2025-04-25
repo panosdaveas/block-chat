@@ -5,6 +5,7 @@ import '../styles/Chat.css';
 import ReadAndDisplayMessages from './ReadMessages';
 import SendMessage from './PromptBasedInput';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
 
 export default function ChatDisplay() {
     return (
@@ -13,7 +14,9 @@ export default function ChatDisplay() {
                 <div className="chat-window">
                     {/* Chat header */}
                     <div className="chat-header">
-                        <h2>BlockChat</h2>
+                        <Link href="/">
+                            <h2>BlockChat</h2>
+                        </Link>
                         <ConnectButton
                             label='Connect'
                             accountStatus={{
@@ -22,9 +25,10 @@ export default function ChatDisplay() {
                             }}
                             chainStatus="name"
                             showBalance={false}
+                            borderRadius='small'
                         />
                     </div>
-                     {/* Chat body */}
+                    {/* Chat body */}
                     <ReadAndDisplayMessages />
                     <SendMessage />
                 </div>

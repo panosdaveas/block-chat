@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -9,17 +10,15 @@ import { config } from './wagmi';
 
 const queryClient = new QueryClient();
 
-const myTheme = merge(darkTheme(), {
+const myTheme = merge(darkTheme({ borderRadius: 'medium' }), {
     blurs: {
         modalOverlay: 'none',
     },
     colors: {
-
-    //  #bfdbfe;
         accentColor: '#61DAFB',
         accentColorForeground: '#282c34',
         connectButtonText: '#bfdbfe',
-        connectButtonBackground: '#1A1B1F',
+        connectButtonBackground: 'transparent',
     },
     fonts: {
         body: 'inherit',

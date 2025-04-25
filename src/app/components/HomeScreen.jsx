@@ -1,14 +1,44 @@
 // @ts-nocheck
 'use client';
+import '@/app/styles/App.css';
+
 import logo from '@/app/app-logo.svg';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import '@/app/styles/App.css';
 import Image from 'next/image'
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import { useDeployClient } from "@/app/hooks/useDeployClient";
 
 const HomeApp = () => {
-    const pathname = usePathname();
+
+    const [isConnectedAccount, setIsConnectedAccount] = useState(false);
+    const [isDeployed, setIsDeployed] = useState(false);
+
+    const { chainsConfig, artifactsData, err, isLoading } = useDeployClient();
+
+    const account = useAccount();
+
+    useEffect(() => {
+        if (account?.chainId && chainsConfig) {
+            const chainConfig = chainsConfig.find(chain => chain.chainId == account.chain.id);
+            if (chainConfig?.contract && chainConfig?.contract.address) {
+                setIsDeployed(true);
+                return;
+            }
+            setIsDeployed(false);
+        }
+    }, [chainsConfig, account?.chainId]);
+
+    useEffect (() => {
+        console.log("Wallet connected:" + account?.isConnected);
+        if (account?.isConnected) {
+            setIsConnectedAccount(true);
+            return;
+        }
+        setIsConnectedAccount(false);
+    }, [account?.isConnected]);
+
     return (
         <div className="App">
             <header className="App-header">
@@ -25,9 +55,17 @@ const HomeApp = () => {
                     chainStatus="name"
                     showBalance={false}
                 />
-                <Link href="/chat">
-                    <button>Chat</button>
-                </Link>
+                {isConnectedAccount &&
+                    (isDeployed ?
+                        <Link href="/chat">
+                            <button>Chat</button>
+                        </Link>
+                        :
+                        <Link href="/deploy">
+                            <button>Deploy</button>
+                        </Link>
+                    )
+                }
             </header>
         </div>
     )

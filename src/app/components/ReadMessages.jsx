@@ -8,12 +8,26 @@ import { useContractAbi } from '@/app/hooks/useContractAbi';
 import { useDeployClient } from "@/app/hooks/useDeployClient";
 import { useMessages } from '@/app/providers/MessagesProvider';
 
+const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            console.log('Text copied to clipboard!');
+        })
+        .catch((err) => {
+            console.error('Failed to copy:', err);
+        });
+};
+
 const Message = ({ sender, message, sourceChain, destinationChain, isUser }) => {
     return (
         <div className={`message-container ${isUser ? 'user-message' : 'other-message'}`}>
             <div className="message-bubble">
-                <div className="sender-name">{sender.substring(0, 4) + '...' + sender.substring(sender.length - 4)}</div>
-                <p className="message-text">{message}</p>
+                <div className="sender-name" onClick={() => copyToClipboard(sender)}>
+                    {sender.substring(0, 4) + '...' + sender.substring(sender.length - 4)}
+                </div>
+                <p className="message-text" onClick={() => copyToClipboard(message)}>
+                    {message}
+                </p>
                 <div className="message-time">
                     <span>
                         {sourceChain} → {destinationChain}
@@ -75,7 +89,7 @@ export default function ReadAndDisplayMessages() {
     useEffect(() => {
         if (receivedData && sentData && chainId && chainsConfig) {
             const mergedMessages = [...receivedData, ...sentData];
-            const sortedMergedMessages = mergedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            const sortedMergedMessages = mergedMessages.sort((a, b) => new Date(Number(a.timestamp)) - new Date(Number(b.timestamp)));
             const formattedMessages = sortedMergedMessages.map((msg, index) => ({
                 id: index,
                 sender: msg.sender,
