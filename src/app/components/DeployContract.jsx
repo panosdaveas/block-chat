@@ -177,13 +177,14 @@ export default function DeployContract() {
                     )}
                 </div>
                 <div className='Content-footer'>
+                    <div className='Content-footer-inside'>
                     <Link href="/">
                         <button className='send-button'>
                             <svg
                                 style={{ transform: 'rotate(90deg)' }}
                                 fill="none"
-                                height="7"
-                                width="14"
+                                height="8"
+                                width="16"
                                 xmlns="http://www.w3.org/2000/svg"
                             >
                                 <title>Dropdown</title>
@@ -206,6 +207,7 @@ export default function DeployContract() {
                             {isDeploying ? 'Deploying...' : 'Deploy Contract'}
                         </button>
                     )}
+                    </div>
                 </div>
             </div>
         </div>

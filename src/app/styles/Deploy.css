@@ -4,6 +4,7 @@
     align-items: center;
     height: 100vh;
     background-color: #282c34;
+    position: relative;
 }
 
 .Content-window {
@@ -50,14 +51,17 @@
 
 .Content-footer {
     position: absolute;
+    bottom: 0;
+    width: 100%;
+    max-width: 540px;
+    margin: 0;
+}
+
+.Content-footer-inside {
+    padding: 32px 0px;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    display: flex;
-    bottom: 0;
-    right: 0;
-    padding: 32px;
-    margin-top: 32px;
-    gap: 32px;
 }
 
 .messages-area {
@@ -128,5 +132,7 @@
 
 .send-button:hover {
     background-color: transparent;
-    color: #61DAFB
+    color: #61DAFB;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
 }
