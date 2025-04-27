@@ -22,6 +22,7 @@
 
 .prompt-textarea {
     background-color: #1A1B1F;
+    
     /* color: #bfdbfe; */
     /* color: #bfdbfe; */
     color: whitesmoke;
@@ -43,6 +44,10 @@
     /* IE 11 */
     scrollbar-width: none;
     /* Firefox 64 */
+}
+
+.prompt-textarea.placeholder {
+    color: #6b7280;
 }
 
 .prompt-textarea::-webkit-scrollbar {
