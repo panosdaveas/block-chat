@@ -23,7 +23,8 @@
 .prompt-textarea {
     background-color: #1A1B1F;
     /* color: #bfdbfe; */
-    color: #bfdbfe;
+    /* color: #bfdbfe; */
+    color: whitesmoke;
     width: 100%;
     /* padding: 16px; */
     padding-top: 16px;
@@ -116,7 +117,7 @@
     /* background-color: #f6f8fa; */
     /* border-radius: 6px; */
     font-size: 0.75rem;
-    color: #586069;
+    color: #6b7280;
 }
 
 .hint-icon {
@@ -180,9 +181,9 @@
     text-align: center;
     outline: none;
     font-size: 1rem;
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .send-button:hover {

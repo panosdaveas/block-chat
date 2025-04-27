@@ -324,7 +324,7 @@ export default function SendMessage() {
                             />
                             :
                             <svg
-                                style={{ transform: 'rotate(-90deg)' }}
+                                style={{ transform: 'rotate(-90deg)', margin: '0 auto', display: 'flex'}}
                                 fill="none"
                                 height="7"
                                 width="14"
