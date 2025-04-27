@@ -162,8 +162,8 @@ export default function SendMessage() {
         try {
             setIsSending(true);
             console.log(formData);
-            console.log(chainDest.contract.address);
-            console.log(chainSource.contract.address);
+            console.log('From:', chainDest.contract.address);
+            console.log('To:', chainSource.contract.address);
 
             const gasAmount = await estimateGasForDestinationChain(
                 chainSource.name,
@@ -189,7 +189,7 @@ export default function SendMessage() {
             console.log("Transaction submitted:", data);
             // Reset form after successful submission
             sleep(1);
-            setMessage("Transaction submitted:", data);
+            setMessage("Transaction submitted!", data);
             setPendingAddress('');
             setPendingChain('');
             setError(null);

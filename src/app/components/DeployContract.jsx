@@ -71,8 +71,6 @@ export default function DeployContract() {
             // Check if we need to switch networks
             if (account.chain.id !== chainConfig.chainId && switchChain) {
                 await switchChain(chainConfig.chainId);
-                // setIsDeployed(false);
-                // setDeployedAddress('');
                 return; // The component will re-render when network changes
             }
 
@@ -96,7 +94,6 @@ export default function DeployContract() {
                 chainConfig.gasService,
                 chainName
             );
-
             // Wait for deployment to confirm
             await contract.waitForDeployment();
 
@@ -145,21 +142,23 @@ export default function DeployContract() {
                             <p className='message-warning'>Loading chain configurations...</p>
                         </>
                     )}
-                    {account.chainId && (
+                    {/* {account.chainId && (
                         <>
                             <p className='message'>
                                 Connected to {account.chain.name}
                             </p>
                         </>
-                    )}
+                    )} */}
                     {deployedAddress && (
                         <><p className="message">Contract deployed successfully!</p><p className="message">Address: <strong>{deployedAddress}</strong></p></>
                     )}
+                    {!isLoading && (
                     <>
                         <p className='message'>Chain ID: {account.chainId || 'Not connected'}</p>
                         <p className='message'>Chain Name: {account.chain?.name || 'Not connected'}</p>
                         <p className='message'>Contract Address: {contractAddress || 'Not set'}</p>
                     </>
+                    )}
                     {isDeployed && (
                         <>
                             <p className="message-warning">Contract deployed </p>

@@ -96,7 +96,7 @@ export default function ReadAndDisplayMessages() {
                 sourceChain: msg.sourceChain,
                 destinationChain: msg.destinationChain,
                 message: msg.content,
-                isUser: msg.sourceChain === chainsConfig.find(chain => chain.chainId == chainId).name,
+                isUser: Boolean(msg.sourceChain === chainsConfig.find(chain => chain.chainId == chainId)?.name && msg.sender === address),
             }));
             setMessages(formattedMessages);
         }
