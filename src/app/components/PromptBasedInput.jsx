@@ -188,8 +188,8 @@ export default function SendMessage() {
 
             console.log("Transaction submitted:", data);
             // Reset form after successful submission
-            sleep(1);
-            setMessage("Transaction submitted!", data);
+            setMessage('');
+            // setMessage("Transaction submitted!", data);
             setPendingAddress('');
             setPendingChain('');
             setError(null);
