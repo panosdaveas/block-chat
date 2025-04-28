@@ -179,22 +179,23 @@ export default function DeployContract() {
                     <div className='Content-footer-inside'>
                     <Link href="/">
                         <button className='send-button'>
-                            <svg
-                                style={{ transform: 'rotate(90deg)' }}
-                                fill="none"
-                                height="8"
-                                width="16"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <title>Dropdown</title>
-                                <path
-                                    d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2.5"
-                                />
-                            </svg>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    height="1rem"
+                                    width="14"
+                                    viewBox="0 0 14 7"
+                                >
+                                    <g transform="rotate(90, 7, 3.5)"> {/* rotate 90 degrees around the center */}
+                                        <path
+                                            d="M12.75 1.54001L8.51647 5.0038C7.77974 5.60658 6.72026 5.60658 5.98352 5.0038L1.75 1.54001"
+                                            stroke="currentColor"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2.5"
+                                        />
+                                    </g>
+                                </svg>
                         </button>
                     </Link>
                     {(!isDeployed && !isDisabledButton) && (

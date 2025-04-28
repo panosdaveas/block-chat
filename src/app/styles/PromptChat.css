@@ -177,7 +177,7 @@
     color: #61DAFB;
     border: none;
     border-radius: 6px;
-    padding: 16px 16px;
+    padding: 10px 16px;
     font-family: inherit;
     font-size: 1rem;
     font-weight: bold;
@@ -185,7 +185,6 @@
     text-decoration: none;
     text-align: center;
     outline: none;
-    font-size: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
